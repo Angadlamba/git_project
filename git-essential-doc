@@ -1,0 +1,197 @@
+// usual git command pattern:
+//     $ git 'subcommand' [--flag] [values] [values] 
+
+
+/** Config **/
+
+	// There are 3 types of config settings:
+	// 	1. system(for many users)  								 /etc/gitconfig
+		2. global(for a specific user)							 ~/.gitconfig
+		3. local(for a particular repository)					 .git/config
+	//     $ git config --global user.name "Angad Lamba"     			  (sets username to 'Angad Lamba')
+	// 	   $ git config --global user.email "angadlamba21@gmail.com"    (sets email to 'angadlamba21@gmail.com')
+	// To read .gitconfig file:
+		   $ git config user.name
+		   $ git config user.email
+	// To see .gitconfig file: 
+		   $ vim .gitconfig
+	// To change color scheme of git output:  
+		   $ git config --global color.ui true
+
+/** Init **/
+	
+	// To initialize a directory with git:
+	// 	   $ git init         (used in that directory to initialize git and creates a .git folder)
+
+/** Status & Add **/
+	
+	// To see what files git is tracking and which it isn't:
+	       $ git status
+	// NOTE: git not record files it record changes to the file specifically the changes in the content of the file.
+	// To add a file to git to track it( or to put changes of a file to the staging area):
+		   $ git add [filename]
+	// NOTE: staging area is a place which contains files that are currently being traced by git and are to be commit.
+	// NOTE: if any changes are made to a file( i.e. being tracked by git), then those changes will be dislayed in unstaged area. To add those changes to the staging area use 'add' command.
+	// To add all the files in the current folder:
+		   $ git add .
+	// To remove file from staging area:
+		  $ git rm --cached filename
+
+/** Commit **/
+	
+	// To commit:
+		   $ git commit        (this opens a editor where you can add a message)
+	// To commit with flags to make process simple:
+		   $ git commit -a     (adds the all the files that git was tracking to staging area and then commit them)
+		   $ git commit -m 'message'     (commits and adds a commit 'message' without opening another editor)
+		   $ git commit -am 'message'	 (to do both above commands together)
+
+/** Gitignore **/
+	
+	// To stop a file or directory from being tracked by git:
+		  $ vim .gitignore       (opens a file name .gitignore)
+		       now add all the files/dir names to be ignored by the git(each on a different line)	
+		       NOTE:  !test/master.txt    (!) -- putting it in front of a filename will add that file to the git and ignore all the other files in that folder.
+
+/** Diff **/
+
+	// To see the changes in a file in the working directory and the staging area:
+		  $ git diff filename
+	      NOTE: diff command only sees the difference between the staging area and the working directory.
+		  	    therefore if a file is added to the staging area after the changes have been made then diff command will not show any output because the staging area and working directory are the same now.
+	// To see the changes in a file that is in the staging area and the file's last commit:
+		  $ git diff --staged filename
+		  $ git diif --cached filename        (Both does the same thing, cached is just the older version of the new staged flag.)
+	// To see the changes in a file in the working directory and file's last commit:
+		  $ git diff HEAD filename            (NOTE: HEAD refers to the last version of file that was committed.)
+	// To see the changes in all the file since the last commit:
+		  $ git diff                          (Between the working directory and the staging area)
+		  $ git diff HEAD					  (Between the working directory and the last commit)
+	// To see the diff between the previous version of a file and it's current version:
+		  $ git diff filehashcode filename    (NOTE: To get the filehashcode use log command.)
+
+/** Log **/
+
+	// To see our commit history:
+		  $ git log							(NOTE: use J or K to move up and down, and Q to exit.)
+	// To see some statistics related to commits:
+		  $ git log --stat
+	// To see commit history in oneline:
+		  $ git log --oneline
+	// To see the graph version of commit history:
+		  $ git log --graph
+		  $ git log --graph -all     	 			(to see all the commits from all the branches.)
+		  $ git log --graph -all --decorate    	 	(to see the name of the branches.)
+		  (NOTE: we can combine multiple flags with spaces between them.)
+	// To convert the commit history into another format:
+		  $ git log --pretty="format"       (eg: format= %h, %cn, %cr) --> (h = hashcode, cn = commiter name, cr = relative commit date)
+	// To open a git GUI version of your history:
+		  $ gitk
+	// To create an alias(so as to use again and again):
+		  $ alias aliasname='command'
+		  		eg: $ alias gl='git log --oneline --all --graph --decorate'      (NOTE: no spaces between 'gl=')
+
+/** Branches **/
+
+	(NOTE: current branch is represented with an asterisk)
+	(NOTE: Branches tracks content separately)
+	// To see all the branches in your git repository:
+		  $ git branch
+	// To see create a branch:
+		  $ git branch branchname
+	// To goto a particular branch:
+		  $ git checkout branchname
+	NOTE: if a content is not being committed then it doesn't matter what branch we are on as it will still show the message about the changes in content in all the branches, irrespective of where the file's content was changed.
+		  because that content is not specific to a branch until we commit it to a specific branch.
+	// Shortcut to create a branch and directly switching over to it:
+		  $ git checkout -b branchname
+	// To delete a branch:
+		  $ git branch -d branchname
+	// To see all the branches(including the one on the remote computer):
+		  $ git branch -a
+	// To create an orphan branch with no parent(i.e. a completely new branch independent of master branch):
+	      $ git checkout --orphan gh-pages
+
+/** Merging **/
+
+	// To merge a branch to the 'current' branch:
+		  $ git merge branchname
+	// To merge a branch with linear graph:(refer Google for better explaination of 'rebase')
+	      $ git rebase branchname
+
+/** Github & git **/
+
+	(NOTE: remote is reference to repository on the remote computer(like GitHub).)
+	// To connect to github remotely:
+		  $ git remote add <name> <link>       (name: the name of the remote repository on our computer,  link: to the remote repository.)
+		  			NOTE: 	name = origin      (as recommended by GitHub)
+		  					link = git@git...  
+	// To move content from the local repository to the remote computer(like GitHub):
+		  $ git push <name> <branchname>       (name: the name of the remote repository on our computer i.e. origin)
+		     	eg: $ git push -u origin master 
+	// To move content from the remote computer(like GitHub) to the local repository:
+		  $ git pull
+	// To clone down another repository to the local computer:
+		  $ git clone link  				   (link = link of the repository to be cloned.)
+	// To pull more granular use fetch and then merge.
+	// To get the from the remote computer to the local repository as another branch so that we can see changes:
+		  $ git fetch
+	.. We can merge these branches if we like the changes:
+	   	  $ git merge branchname
+	// To rename a file:
+		  $ git mv oldfilname newfilename
+
+	NOTE: Google for 'flags' of pull and fetch.
+
+/** Github pages **/
+	
+	// About 'github-pages'. Add your own webpage.
+	// How to create a project from start.
+	// To create an orphan branch with no parent(i.e. a completely new branch independent of master branch):
+	      $ git checkout --orphan gh-pages
+	// To remove file from staging area:
+		  $ git rm --cached filename  	(to remove a specific file)
+		  $ git rm --cached -r . 		(to remove all the files)
+
+/** git interactive tool **/
+    
+	// To open a git interactive add tool:
+		  $ git add -i
+	// To stage a part of a file:
+		  $ git add -p
+
+/** Stash **/
+    
+	// To stash a file so that changes get staged but not get commited until done so later.(the changes to those files will be replaced temporarly. So that we can make any changes we want to the working directory before commiting those stashed changes.)
+		  $ git stash
+		  // $ git stash save "comment"   (adds a message to the files getting stashed.)
+	// To see the things that are stashed:
+		  $ git stash list
+	// To bring back the lastest change that was stashed:
+	  	  $ git stash apply
+	// To bring back the specific stash to the working directory:
+		  $ git stash apply stashcode        (eg: $ git stash apply stash@{1})
+	// To remove the stash from the stash list:
+		  $ git stash pop stashcode
+
+/** Aliases **/
+    
+	// To add alias to git:
+		  $ git config --global alias.aliasname command       (aliasname: name to be used as alias, command: whose alias is to be created.)
+		  			eg: $ git config --global alias.a add
+		  				$ git a .         (is same as $ git add .)
+		  			eg: $ git config --global alias.s status
+		  			    $ git s 	      (is same as $ git status)
+
+
+/** VIDEO_21 **/
+
+	// videos about merge conflicts and how to resolve them.
+
+/** VIDEO_22 **/
+
+	// videos about github desktop client.
+
+/** VIDEO_23 **/
+
+	// videos about github desktop client.
