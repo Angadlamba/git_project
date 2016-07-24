@@ -182,16 +182,3 @@
 		  				$ git a .         (is same as $ git add .)
 		  			eg: $ git config --global alias.s status
 		  			    $ git s 	      (is same as $ git status)
-
-
-/** VIDEO_21 **/
-
-	// videos about merge conflicts and how to resolve them.
-
-/** VIDEO_22 **/
-
-	// videos about github desktop client.
-
-/** VIDEO_23 **/
-
-	// videos about github desktop client.
